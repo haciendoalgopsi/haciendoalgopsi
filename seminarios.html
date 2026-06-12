@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seminarios — Haciendo Algo Psicoanálisis Cancún</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lino:      #F2EBE0;
+    --arena:     #E2D5C3;
+    --terracota: #C4906A;
+    --topo:      #7A6A5A;
+    --carbon:    #2E2925;
+    --serif:     'EB Garamond', Georgia, serif;
+    --sans:      'DM Sans', system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--lino); color: var(--carbon); font-family: var(--sans); font-weight: 300; line-height: 1.7; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: var(--lino); border-bottom: 0.5px solid var(--arena); padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 36px; width: auto; mix-blend-mode: multiply; }
+  .nav-logo-text { font-family: var(--serif); font-size: 14px; letter-spacing: 0.16em; color: var(--carbon); }
+  .nav-back { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--topo); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--carbon); }
+
+  .page-hero { background: var(--carbon); padding: 64px 6vw 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; }
+  .page-hero-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terracota); margin-bottom: 16px; display: block; }
+  .page-hero-title { font-family: var(--serif); font-size: clamp(32px, 4vw, 52px); font-weight: 400; color: var(--lino); line-height: 1.15; }
+  .page-hero-title em { font-style: italic; color: var(--topo); }
+  .page-hero-desc { font-size: 14px; color: var(--topo); line-height: 1.8; max-width: 400px; }
+
+  main { flex: 1; padding: 56px 5vw 72px; }
+  .sem-intro { font-size: 12px; color: var(--topo); margin-bottom: 40px; letter-spacing: 0.04em; font-style: italic; }
+
+  .seminarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .sem-card { background: white; overflow: hidden; cursor: pointer; transition: transform 0.22s, box-shadow 0.22s; }
+  .sem-card:hover { transform: translateY(-5px); box-shadow: 0 8px 32px rgba(46,41,37,0.10); }
+  .sem-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: top; display: block; }
+  .sem-caption { padding: 18px 18px 22px; border-top: 2px solid var(--arena); }
+  .sem-num { font-size: 10px; letter-spacing: 0.18em; color: var(--terracota); text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .sem-title { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--carbon); line-height: 1.3; margin-bottom: 6px; }
+  .sem-meta { font-size: 12px; color: var(--topo); line-height: 1.6; }
+
+  /* LIGHTBOX */
+  .lb { display: none; position: fixed; inset: 0; background: rgba(46,41,37,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
+  .lb.open { display: flex; }
+  .lb-inner { position: relative; max-width: 540px; width: 100%; }
+  .lb-img { width: 100%; max-height: 82vh; object-fit: contain; display: block; }
+  .lb-close { position: absolute; top: -44px; right: 0; background: none; border: none; color: var(--arena); font-size: 32px; cursor: pointer; line-height: 1; padding: 4px 8px; }
+  .lb-close:hover { color: white; }
+  .lb-caption { margin-top: 16px; text-align: center; }
+  .lb-caption-title { font-family: var(--serif); font-size: 18px; color: var(--lino); display: block; margin-bottom: 4px; }
+  .lb-caption-meta { font-size: 12px; color: var(--topo); }
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(242,235,224,0.5); font-size: 36px; cursor: pointer; padding: 8px 10px; transition: color 0.2s; line-height: 1; }
+  .lb-nav:hover { color: var(--lino); }
+  .lb-prev { left: -52px; }
+  .lb-next { right: -52px; }
+
+  footer { background: var(--carbon); border-top: 0.5px solid #3a3530; padding: 22px 5vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-logo { font-family: var(--serif); font-size: 13px; color: var(--topo); letter-spacing: 0.14em; }
+  .footer-copy { font-size: 11px; color: #4a4540; }
+
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .page-hero { grid-template-columns: 1fr; gap: 20px; padding: 48px 5vw 40px; }
+    .seminarios-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .lb-prev { left: -32px; }
+    .lb-next { right: -32px; }
+  }
+  @media (max-width: 480px) {
+    .seminarios-grid { grid-template-columns: 1fr; }
+    .lb-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="cierraLB(event)">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="cerrarLB()">×</button>
+    <button class="lb-nav lb-prev" onclick="navLB(-1); event.stopPropagation()">‹</button>
+    <button class="lb-nav lb-next" onclick="navLB(1); event.stopPropagation()">›</button>
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <div class="lb-caption">
+      <span class="lb-caption-title" id="lbTitle"></span>
+      <span class="lb-caption-meta" id="lbMeta"></span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-text">HACIENDO ALGO</span>
+    <img src="./assets/logo.png" alt="Haciendo Algo">
+  </a>
+  <a href="index.html" class="nav-back">← Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div>
+    <span class="page-hero-label">Formación · Historia</span>
+    <h1 class="page-hero-title">Seminarios<br><em>y coloquios</em></h1>
+  </div>
+  <p class="page-hero-desc">Registro de los seminarios, coloquios y actividades de formación que hemos organizado y en los que hemos participado desde Cancún.</p>
+</div>
+
+<!-- GRID -->
+<main>
+  <p class="sem-intro">Haz clic en cualquier imagen para verla completa. Usa las flechas para navegar.</p>
+  <div class="seminarios-grid">
+
+    <div class="sem-card fade-up" onclick="abrirLB(0)">
+      <img src="./assets/seminario-1.jpg" alt="No Hay Análisis Didáctico">
+      <div class="sem-caption">
+        <span class="sem-num">01</span>
+        <div class="sem-title">No Hay Análisis Didáctico</div>
+        <div class="sem-meta">Manuel Hernández · Oct 2018<br>Ka'Yok', Planetario de Cancún</div>
+      </div>
+    </div>
+
+    <div class="sem-card fade-up" onclick="abrirLB(1)">
+      <img src="./assets/seminario-2.webp" alt="Transformarse en Analista">
+      <div class="sem-caption">
+        <span class="sem-num">02</span>
+        <div class="sem-title">Transformarse en Analista</div>
+        <div class="sem-meta">Manuel Hernández · Nov 2017<br>Ka'Yok', Planetario de Cancún</div>
+      </div>
+    </div>
+
+    <div class="sem-card fade-up" onclick="abrirLB(2)">
+      <img src="./assets/seminario-3.jpg" alt="Encuentros y Desencuentros">
+      <div class="sem-caption">
+        <span class="sem-num">03</span>
+        <div class="sem-title">Freud / Lacan: Encuentros y Desencuentros</div>
+        <div class="sem-meta">Coloquio de Psicoanálisis<br>Querétaro · Cancún · Cuernavaca</div>
+      </div>
+    </div>
+
+    <div class="sem-card fade-up" onclick="abrirLB(3)">
+      <img src="./assets/seminario-4.jpg" alt="Del Goce y Otras Errancias">
+      <div class="sem-caption">
+        <span class="sem-num">04</span>
+        <div class="sem-title">Del Goce y Otras Errancias</div>
+        <div class="sem-meta">Coloquio · 6 y 7 mayo 2022<br>Cancún, México</div>
+      </div>
+    </div>
+
+    <div class="sem-card fade-up" onclick="abrirLB(4)">
+      <img src="./assets/seminario-5.png" alt="Modalidades de la Clínica en Jacques Lacan">
+      <div class="sem-caption">
+        <span class="sem-num">05</span>
+        <div class="sem-title">Modalidades de la Clínica en Jacques Lacan</div>
+        <div class="sem-meta">Segundo Coloquio · 23–25 abril 2026<br>Planetario Ka'Yok', Cancún</div>
+      </div>
+    </div>
+
+    <div class="sem-card fade-up" onclick="abrirLB(5)">
+      <img src="./assets/seminario-6.jpg" alt="El Trago Amargo del Ocultismo">
+      <div class="sem-caption">
+        <span class="sem-num">06</span>
+        <div class="sem-title">El Trago Amargo del Ocultismo</div>
+        <div class="sem-meta">Gloria Leff · 7–8 diciembre<br>Kukulcán Plaza, Cancún</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <span class="footer-logo">HACIENDO ALGO · PSA · CANCÚN</span>
+  <span class="footer-copy">© 2025 Haciendo Algo</span>
+</footer>
+
+<script>
+  const seminarios = [
+    { src: './assets/seminario-1.jpg',  title: 'No Hay Análisis Didáctico',                     meta: 'Manuel Hernández · Octubre 2018 · Ka\'Yok\', Cancún' },
+    { src: './assets/seminario-2.webp', title: 'Transformarse en Analista',                      meta: 'Manuel Hernández · Noviembre 2017 · Ka\'Yok\', Cancún' },
+    { src: './assets/seminario-3.jpg',  title: 'Freud / Lacan: Encuentros y Desencuentros',      meta: 'Coloquio de Psicoanálisis · Querétaro · Cancún · Cuernavaca' },
+    { src: './assets/seminario-4.jpg',  title: 'Del Goce y Otras Errancias',                     meta: 'Coloquio · 6 y 7 de mayo 2022 · Cancún' },
+    { src: './assets/seminario-5.png',  title: 'Modalidades de la Clínica en Jacques Lacan',     meta: 'Segundo Coloquio · 23–25 abril 2026 · Planetario Ka\'Yok\', Cancún' },
+    { src: './assets/seminario-6.jpg',  title: 'El Trago Amargo del Ocultismo',                  meta: 'Gloria Leff · 7–8 diciembre · Kukulcán Plaza, Cancún' },
+  ];
+  let idx = 0;
+
+  function abrirLB(i) {
+    idx = i; mostrarLB();
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function mostrarLB() {
+    const s = seminarios[idx];
+    document.getElementById('lbImg').src = s.src;
+    document.getElementById('lbImg').alt = s.title;
+    document.getElementById('lbTitle').textContent = s.title;
+    document.getElementById('lbMeta').textContent = s.meta;
+  }
+  function cerrarLB() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function cierraLB(e) { if (e.target === document.getElementById('lb')) cerrarLB(); }
+  function navLB(dir) { idx = (idx + dir + seminarios.length) % seminarios.length; mostrarLB(); }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb').classList.contains('open')) return;
+    if (e.key === 'Escape') cerrarLB();
+    if (e.key === 'ArrowRight') navLB(1);
+    if (e.key === 'ArrowLeft')  navLB(-1);
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
