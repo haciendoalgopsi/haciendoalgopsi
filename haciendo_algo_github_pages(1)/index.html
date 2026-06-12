@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haciendo Algo — Psicoanálisis Cancún</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lino:      #F2EBE0;
+    --arena:     #E2D5C3;
+    --terracota: #C4906A;
+    --topo:      #7A6A5A;
+    --carbon:    #2E2925;
+    --wa:        #25D366;
+    --serif:     'EB Garamond', Georgia, serif;
+    --sans:      'DM Sans', system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--lino); color: var(--carbon); font-family: var(--sans); font-weight: 300; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 200; background: var(--lino); border-bottom: 0.5px solid var(--arena); padding: 0 4vw; display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-text { font-family: var(--serif); font-size: 15px; letter-spacing: 0.16em; color: var(--carbon); }
+  .nav-logo img { height: 42px; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+  .nav-links a { font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--topo); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--carbon); }
+  .nav-cta { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lino); background: var(--terracota); padding: 10px 20px; text-decoration: none; transition: opacity 0.2s; white-space: nowrap; flex-shrink: 0; }
+  .nav-cta:hover { opacity: 0.85; }
+  .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+  .nav-toggle span { display: block; width: 22px; height: 0.5px; background: var(--carbon); }
+
+  /* HERO */
+  #inicio { display: grid; grid-template-columns: 1.1fr 0.9fr; min-height: calc(100vh - 64px); }
+  .hero-text { padding: 7vw 4vw 7vw 5vw; display: flex; flex-direction: column; justify-content: center; }
+  .eyebrow { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terracota); margin-bottom: 22px; }
+  .hero-title { font-family: var(--serif); font-size: clamp(34px, 4.5vw, 56px); font-weight: 400; line-height: 1.15; color: var(--carbon); margin-bottom: 26px; }
+  .hero-title em { font-style: italic; color: var(--topo); }
+  .hero-body { font-size: 15px; color: var(--topo); line-height: 1.85; max-width: 420px; margin-bottom: 38px; }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary { display: inline-block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lino); background: var(--terracota); padding: 13px 26px; text-decoration: none; transition: opacity 0.2s; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline { display: inline-block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--carbon); border: 0.5px solid var(--topo); padding: 13px 26px; text-decoration: none; transition: background 0.2s; }
+  .btn-outline:hover { background: var(--arena); }
+  .hero-visual { background: var(--arena); position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 36px; }
+  .hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+  .hero-visual-caption { position: relative; z-index: 1; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lino); border-top: 0.5px solid rgba(255,255,255,0.5); padding-top: 12px; width: 100%; }
+  .hero-visual-caption strong { color: white; font-weight: 500; letter-spacing: 0.14em; }
+
+  /* FRASE LACAN */
+  .frase { background: var(--carbon); padding: 72px 6vw; text-align: center; }
+  .frase blockquote { font-family: var(--serif); font-size: clamp(20px, 2.8vw, 32px); font-style: italic; color: var(--lino); line-height: 1.4; max-width: 680px; margin: 0 auto 14px; }
+  .frase cite { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--topo); font-style: normal; }
+
+  /* POR QUÉ */
+  #porque { display: grid; grid-template-columns: 1fr 1.5fr; background: var(--lino); }
+  .porque-label { padding: 80px 4vw; border-right: 0.5px solid var(--arena); display: flex; flex-direction: column; justify-content: flex-start; }
+  .section-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracota); margin-bottom: 18px; display: block; }
+  .section-title { font-family: var(--serif); font-size: clamp(24px, 2.8vw, 36px); font-weight: 400; line-height: 1.2; color: var(--carbon); }
+  .porque-content { padding: 80px 4vw; background: var(--arena); }
+  .porque-intro { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--carbon); line-height: 1.6; margin-bottom: 28px; }
+  .porque-lista { list-style: none; margin-bottom: 28px; }
+  .porque-lista li { font-size: 14px; color: var(--topo); line-height: 1.75; padding: 6px 0 6px 18px; border-left: 1.5px solid var(--terracota); margin-bottom: 6px; }
+  .porque-cuerpo { font-size: 14px; color: var(--topo); line-height: 1.85; }
+  .porque-cuerpo p { margin-bottom: 14px; }
+  .porque-cuerpo strong { color: var(--carbon); font-weight: 400; }
+  .porque-apuesta { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--carbon); border-left: 2px solid var(--terracota); padding-left: 20px; line-height: 1.55; margin-top: 28px; }
+  .btn-ig { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lino); background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); padding: 12px 20px; text-decoration: none; transition: opacity 0.2s; align-self: flex-start; }
+  .btn-ig:hover { opacity: 0.88; }
+
+  /* CITAS PACIENTES */
+  .citas-pacientes { background: var(--lino); padding: 64px 6vw; }
+  .citas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 36px; }
+  .cita-card { background: var(--arena); padding: 28px 24px; display: flex; flex-direction: column; }
+  .cita-texto { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--carbon); line-height: 1.6; margin-bottom: 14px; flex: 1; }
+  .cita-autor { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--carbon); }
+  .cita-fuente { font-size: 11px; color: var(--topo); margin-top: 3px; font-style: italic; }
+
+  /* IMAGEN ENTRE CITAS Y SERVICIOS */
+  .img-intermedia { width: 100%; max-height: 420px; object-fit: cover; display: block; }
+
+  /* SERVICIOS */
+  #servicios { padding: 80px 5vw; background: var(--lino); }
+  .servicios-header { margin-bottom: 44px; border-bottom: 0.5px solid var(--arena); padding-bottom: 22px; }
+  .servicios-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--arena); border: 0.5px solid var(--arena); }
+  .servicio-card { background: var(--lino); padding: 32px 26px; cursor: pointer; transition: background 0.2s; }
+  .servicio-card:hover { background: var(--arena); }
+  .servicio-num { font-size: 10px; letter-spacing: 0.14em; color: var(--terracota); margin-bottom: 16px; display: block; }
+  .servicio-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--carbon); margin-bottom: 10px; line-height: 1.3; }
+  .servicio-desc { font-size: 13px; color: var(--topo); line-height: 1.75; margin-bottom: 14px; }
+  .servicio-arrow { font-size: 11px; color: var(--terracota); letter-spacing: 0.08em; cursor: pointer; }
+  .servicio-analistas { display: none; margin-top: 14px; padding-top: 14px; border-top: 0.5px solid var(--arena); }
+  .servicio-analistas.open { display: block; }
+  .servicio-analistas-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--topo); margin-bottom: 10px; }
+  .analista-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon); border: 0.5px solid var(--topo); padding: 6px 12px; margin-right: 8px; margin-bottom: 6px; text-decoration: none; transition: all 0.2s; }
+  .analista-chip:hover { background: var(--terracota); color: var(--lino); border-color: var(--terracota); }
+
+  /* AGENDA */
+  .agenda-banner { background: var(--terracota); padding: 44px 5vw; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .agenda-banner h3 { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--lino); margin-bottom: 6px; }
+  .agenda-banner p { font-size: 13px; color: rgba(242,235,224,0.8); }
+  .btn-lino { display: inline-block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracota); background: var(--lino); padding: 13px 26px; text-decoration: none; transition: opacity 0.2s; white-space: nowrap; }
+  .btn-lino:hover { opacity: 0.88; }
+
+  /* ANALISTAS */
+  #analistas { padding: 80px 5vw; background: var(--arena); }
+  .analistas-header { margin-bottom: 44px; }
+  .analistas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .analista-card { background: var(--lino); padding: 28px 24px; transition: transform 0.2s; }
+  .analista-card:hover { transform: translateY(-3px); }
+  .analista-avatar { width: 68px; height: 68px; border-radius: 50%; background: var(--arena); border: 0.5px solid var(--terracota); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 22px; color: var(--topo); overflow: hidden; }
+  .analista-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .analista-name { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--carbon); margin-bottom: 4px; }
+  .analista-rol { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracota); margin-bottom: 12px; }
+  .analista-bio { font-size: 13px; color: var(--topo); line-height: 1.7; margin-bottom: 18px; }
+  .analista-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .analista-wa { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--topo); text-decoration: none; border: 0.5px solid var(--topo); padding: 7px 13px; transition: all 0.2s; letter-spacing: 0.05em; }
+  .analista-wa:hover { background: var(--wa); color: white; border-color: var(--wa); }
+  .analista-wa svg { width: 14px; height: 14px; }
+  .analista-pub-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--terracota); border: 0.5px solid var(--terracota); padding: 7px 13px; cursor: pointer; background: none; font-family: var(--sans); letter-spacing: 0.05em; transition: all 0.2s; }
+  .analista-pub-btn:hover { background: var(--terracota); color: var(--lino); }
+  .analista-pubs { display: none; margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--arena); }
+  .analista-pubs.open { display: block; }
+  .analista-pubs-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--topo); margin-bottom: 12px; }
+  .pub-item { padding: 10px 0; border-bottom: 0.5px solid var(--arena); }
+  .pub-item:last-child { border-bottom: none; }
+  .pub-tag { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracota); margin-bottom: 4px; display: block; }
+  .pub-title { font-family: var(--serif); font-size: 15px; color: var(--carbon); line-height: 1.3; text-decoration: none; display: block; }
+  .pub-title:hover { color: var(--terracota); }
+  .pub-placeholder { font-size: 13px; color: var(--topo); font-style: italic; }
+
+  /* ACTIVIDADES */
+  #actividades { padding: 80px 5vw; background: var(--lino); }
+  .actividades-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
+  .actividad-card { border-top: 0.5px solid var(--arena); padding-top: 22px; }
+  .actividad-tipo { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracota); margin-bottom: 10px; display: block; }
+  .actividad-title { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--carbon); line-height: 1.3; margin-bottom: 8px; }
+  .actividad-desc { font-size: 13px; color: var(--topo); line-height: 1.7; }
+
+  /* SEMINARIOS */
+  #seminarios { padding: 80px 5vw; background: var(--arena); }
+  .seminarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
+  .seminario-img-card { background: var(--lino); overflow: hidden; transition: transform 0.2s; }
+  .seminario-img-card:hover { transform: translateY(-3px); }
+  .seminario-img-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: top; display: block; }
+  .seminario-img-caption { padding: 16px 16px 20px; }
+  .seminarios-placeholder { font-size: 13px; color: var(--topo); font-style: italic; margin-top: 20px; }
+
+  /* MATERIAL */
+  #material { padding: 80px 5vw; background: var(--carbon); }
+  .material-header .section-label { color: var(--topo); }
+  .material-header .section-title { color: var(--lino); }
+  .material-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .material-card { background: #3a3530; padding: 24px 20px; text-decoration: none; transition: background 0.2s; display: block; }
+  .material-card:hover { background: #4a4540; }
+  .material-tipo { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracota); margin-bottom: 10px; display: block; }
+  .material-title { font-family: var(--serif); font-size: 16px; color: var(--lino); line-height: 1.4; margin-bottom: 6px; }
+  .material-link { font-size: 11px; color: var(--topo); letter-spacing: 0.04em; }
+
+  /* PUBLICACIONES */
+  #publicaciones { padding: 80px 5vw; background: var(--lino); }
+  .blog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 44px; }
+  .blog-card { border-top: 0.5px solid var(--arena); padding-top: 22px; transition: border-color 0.2s; text-decoration: none; display: block; }
+  .blog-card:hover { border-color: var(--terracota); }
+  .blog-tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracota); margin-bottom: 10px; display: block; }
+  .blog-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--carbon); line-height: 1.3; margin-bottom: 8px; }
+  .blog-excerpt { font-size: 13px; color: var(--topo); line-height: 1.7; margin-bottom: 14px; }
+  .blog-meta { display: flex; align-items: center; gap: 12px; }
+  .blog-autor { font-size: 11px; color: var(--topo); }
+  .blog-fecha { font-size: 11px; color: var(--terracota); }
+  .blog-leer { font-size: 11px; color: var(--terracota); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 10px; display: inline-block; }
+
+  /* CONTACTO */
+  #contacto { display: grid; grid-template-columns: 1fr 1.3fr; background: var(--carbon); }
+  .contacto-info { padding: 80px 4vw; border-right: 0.5px solid #3a3530; display: flex; flex-direction: column; justify-content: center; }
+  .contacto-info .section-label { color: var(--topo); }
+  .contacto-lema { font-family: var(--serif); font-size: clamp(20px, 2.5vw, 28px); font-style: italic; color: var(--lino); line-height: 1.35; margin-bottom: 10px; }
+  .contacto-sublema { font-family: var(--serif); font-size: 18px; color: var(--terracota); margin-bottom: 32px; font-style: italic; }
+  .contacto-dato { display: flex; flex-direction: column; margin-bottom: 18px; }
+  .contacto-dato-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--topo); margin-bottom: 4px; }
+  .contacto-dato-valor { font-size: 14px; color: rgba(242,235,224,0.7); }
+  .contacto-dato-valor a { color: rgba(242,235,224,0.7); text-decoration: none; transition: color 0.2s; }
+  .contacto-dato-valor a:hover { color: var(--lino); }
+  .contacto-social { display: flex; gap: 14px; margin-top: 20px; }
+  .social-link { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--topo); text-decoration: none; border: 0.5px solid #4a4540; padding: 8px 14px; transition: all 0.2s; }
+  .social-link:hover { border-color: var(--terracota); color: var(--terracota); }
+  .social-link svg { width: 14px; height: 14px; }
+  .contacto-form { padding: 80px 4vw; display: flex; flex-direction: column; justify-content: center; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--topo); margin-bottom: 8px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; background: transparent; border: none; border-bottom: 0.5px solid #4a4540; color: var(--lino); font-family: var(--sans); font-size: 14px; font-weight: 300; padding: 10px 0; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--terracota); }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: #555; }
+  .form-group select option { background: var(--carbon); color: var(--lino); }
+  .form-group textarea { resize: none; height: 80px; }
+  .btn-wa-form { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--wa); color: white; border: none; padding: 14px 24px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; margin-top: 8px; }
+  .btn-wa-form:hover { opacity: 0.88; }
+  .btn-wa-form:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-wa-form svg { width: 16px; height: 16px; }
+
+  /* QR */
+  .qr-section { background: var(--arena); padding: 56px 5vw; display: flex; align-items: center; gap: 44px; }
+  .qr-img { width: 130px; height: 130px; flex-shrink: 0; border: 0.5px solid var(--topo); padding: 8px; background: white; }
+  .qr-text h3 { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--carbon); margin-bottom: 6px; }
+  .qr-text p { font-size: 13px; color: var(--topo); line-height: 1.7; max-width: 360px; }
+  .qr-url { font-size: 11px; color: var(--terracota); margin-top: 8px; display: block; }
+
+  /* WA FLOTANTE */
+  .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .wa-menu { display: none; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .wa-menu.open { display: flex; }
+  .wa-btn { display: flex; align-items: center; gap: 9px; background: var(--wa); color: white; padding: 10px 16px; text-decoration: none; font-size: 12px; letter-spacing: 0.05em; transition: opacity 0.2s; }
+  .wa-btn:hover { opacity: 0.88; }
+  .wa-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .wa-toggle { width: 50px; height: 50px; border-radius: 50%; background: var(--wa); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px rgba(0,0,0,0.18); }
+
+  /* FOOTER */
+  footer { background: var(--carbon); border-top: 0.5px solid #3a3530; padding: 22px 5vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-logo { font-family: var(--serif); font-size: 13px; color: var(--topo); letter-spacing: 0.14em; }
+  .footer-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--topo); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--terracota); }
+  .footer-copy { font-size: 11px; color: #4a4540; }
+
+  /* ANIMACIONES */
+  .fade-up { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* WA SVG reutilizable */
+  .wa-ico { display:inline-block; }
+
+  /* MOBILE */
+  @media (max-width: 840px) {
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--lino); border-bottom: 0.5px solid var(--arena); padding: 20px 5vw; gap: 18px; z-index: 99; }
+    .nav-cta { display: none; }
+    .nav-toggle { display: flex; }
+    #inicio { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 220px; }
+    #porque { grid-template-columns: 1fr; }
+    .porque-label { border-right: none; border-bottom: 0.5px solid var(--arena); padding: 48px 5vw; }
+    .porque-content { padding: 48px 5vw; }
+    .citas-grid { grid-template-columns: 1fr; }
+    .servicios-grid { grid-template-columns: 1fr; }
+    .analistas-grid { grid-template-columns: 1fr; }
+    .actividades-grid { grid-template-columns: 1fr; }
+    .seminarios-grid { grid-template-columns: 1fr; }
+    .material-grid { grid-template-columns: 1fr; }
+    .blog-grid { grid-template-columns: 1fr; }
+    #contacto { grid-template-columns: 1fr; }
+    .contacto-info { border-right: none; border-bottom: 0.5px solid #3a3530; padding: 48px 5vw; }
+    .contacto-form { padding: 48px 5vw; }
+    .agenda-banner { flex-direction: column; align-items: flex-start; }
+    .qr-section { flex-direction: column; align-items: flex-start; gap: 22px; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WA FLOTANTE -->
+<div class="wa-float">
+  <div class="wa-menu" id="waMenu">
+    <a class="wa-btn" href="https://wa.me/529981445201?text=Hola%20Gabriel,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Gabriel García
+    </a>
+    <a class="wa-btn" href="https://wa.me/529983423808?text=Hola%20Gerardo,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Gerardo Anzures
+    </a>
+    <a class="wa-btn" href="https://wa.me/529983056978?text=Hola%20Alejandro,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Alejandro Soto
+    </a>
+    <a class="wa-btn" href="https://wa.me/529984603085?text=Hola%20Ingrid,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Ingrid Nixe
+    </a>
+  </div>
+  <button class="wa-toggle" id="waToggle" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#inicio" class="nav-logo">
+    <span class="nav-logo-text">HACIENDO ALGO</span>
+    <img src="logo.png" alt="Haciendo Algo Psicoanálisis">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#porque">¿Por qué?</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#analistas">Analistas</a></li>
+    <li><a href="#actividades">Actividades</a></li>
+    <li><a href="#publicaciones">Escritos</a></li>
+    <li><a href="#material">Material</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Primera Consulta</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-text">
+    <p class="eyebrow">Psicoanálisis · Cancún</p>
+    <h1 class="hero-title fade-up">Un espacio para<br><em>darle lugar</em><br>a tus palabras</h1>
+    <p class="hero-body fade-up">Somos un colectivo de psicoanalistas con sede en Cancún dedicado a la práctica clínica y a la transmisión del psicoanálisis. Sostenemos espacios de escucha donde cada persona pueda encontrar un lugar para hablar de aquello que insiste, interroga o produce malestar. Atendemos de manera presencial y en línea.</p>
+    <div class="hero-btns fade-up">
+      <a href="#contacto" class="btn-primary">Primera Consulta</a>
+      <a href="#porque" class="btn-outline">¿Por qué el psicoanálisis?</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img src="consultorio.jpg" alt="Cancún — Haciendo Algo Psicoanálisis">
+    <p class="hero-visual-caption"><strong>Cancún</strong> · <strong>Presencial</strong> y <strong>en línea</strong></p>
+  </div>
+</section>
+
+<!-- FRASE LACAN -->
+<div class="frase">
+  <blockquote>"El inconsciente está estructurado como un lenguaje."</blockquote>
+  <cite>Jacques Lacan</cite>
+</div>
+
+<!-- POR QUÉ -->
+<section id="porque">
+  <div class="porque-label">
+    <span class="section-label">Espacio psicoanalítico</span>
+    <h2 class="section-title fade-up">¿Por qué el<br>psicoanálisis?</h2>
+    <a href="https://instagram.com/_haciendoalgo" target="_blank" rel="noopener" class="btn-ig fade-up">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15" height="15"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      Síguenos en Instagram
+    </a>
+  </div>
+  <div class="porque-content">
+    <p class="porque-intro fade-up">Hay cosas que aparecen sin que las busquemos.</p>
+    <ul class="porque-lista fade-up">
+      <li>Un sueño que permanece en la memoria al despertar.</li>
+      <li>Una palabra que se escapa en el momento menos esperado.</li>
+      <li>Un acto del que después nos preguntamos: "¿Por qué hice eso?"</li>
+      <li>Una angustia que no siempre tiene una explicación clara.</li>
+      <li>Un síntoma que insiste.</li>
+    </ul>
+    <div class="porque-cuerpo fade-up">
+      <p>En psicoanálisis, estas experiencias no son consideradas errores sin importancia ni simples accidentes. Son formas en las que algo de nuestra historia, nuestros deseos y nuestros conflictos puede manifestarse.</p>
+      <p><strong>Por eso, un análisis comienza hablando.</strong></p>
+      <p>No hace falta saber exactamente qué decir. No hace falta tener una historia ordenada. No hace falta entender todo lo que ocurre.</p>
+      <p>Se puede comenzar por un recuerdo, un sueño, una preocupación, una pregunta o incluso por algo que parece no tener importancia.</p>
+      <p>En este espacio, está bien no saber. Está bien perder el hilo. Está bien que algo no tenga sentido de inmediato. Está bien decir lo primero que viene a la mente.</p>
+    </div>
+    <div class="porque-apuesta fade-up">"La apuesta del psicoanálisis es que, al hablar, algo puede empezar a escucharse de una manera diferente."</div>
+  </div>
+</section>
+
+<!-- CITAS PACIENTES -->
+<div class="citas-pacientes">
+  <span class="section-label">Voces del análisis</span>
+  <div class="citas-grid">
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"El análisis no me liberó de la angustia; me permitió hacer algo con ella."</p>
+      <span class="cita-autor">— Betty Milan</span>
+      <span class="cita-fuente">El loro y el doctor · Lacan aún</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"Traducirse a sí mismo fue, para mí, el verdadero trabajo del análisis."</p>
+      <span class="cita-autor">— Betty Milan</span>
+      <span class="cita-fuente">El loro y el doctor · Lacan aún</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"El futuro dependía de una nueva memoria del pasado. ¿Quién he sido que no puedo volver a ser la que soy?"</p>
+      <span class="cita-autor">— Betty Milan</span>
+      <span class="cita-fuente">El loro y el doctor</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"Entré en análisis para salvarme y descubrí que tenía que reinventarme."</p>
+      <span class="cita-autor">— Pierre Rey</span>
+      <span class="cita-fuente">Une saison chez Lacan</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"Lacan me obligó a escuchar lo que yo mismo decía sin saberlo."</p>
+      <span class="cita-autor">— Pierre Rey</span>
+      <span class="cita-fuente">Une saison chez Lacan</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"La sesión terminaba cuando comenzaba a entender algo."</p>
+      <span class="cita-autor">— Pierre Rey</span>
+      <span class="cita-fuente">Une saison chez Lacan</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"No salí del análisis siendo otro hombre; salí siendo responsable de lo que era."</p>
+      <span class="cita-autor">— Gérard Haddad</span>
+      <span class="cita-fuente">El día que Lacan me adoptó</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"Lacan no respondía a mis preguntas; hacía imposible que siguiera formulándolas de la misma manera."</p>
+      <span class="cita-autor">— Gérard Haddad</span>
+      <span class="cita-fuente">El día que Lacan me adoptó</span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"El análisis no me enseñó quién era; me enseñó que no era quien creía ser."</p>
+      <span class="cita-autor">— Moustapha Safouan</span>
+      <span class="cita-fuente"></span>
+    </div>
+
+    <div class="cita-card fade-up" style="grid-column: span 1;">
+      <p class="cita-texto">"Hay un momento en el análisis en que uno deja de buscar respuestas y empieza a soportar preguntas."</p>
+      <span class="cita-autor">— Catherine Millot</span>
+      <span class="cita-fuente"></span>
+    </div>
+
+    <div class="cita-card fade-up">
+      <p class="cita-texto">"Mi análisis con Lacan fue el acontecimiento fundamental de mi vida."</p>
+      <span class="cita-autor">— Gérard Haddad</span>
+      <span class="cita-fuente">El día que Lacan me adoptó</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- IMAGEN INTERMEDIA (entre citas y servicios) -->
+<img src="consultorio.jpg" alt="Haciendo Algo — Colectivo de Psicoanálisis Cancún" class="img-intermedia" onerror="this.style.display='none'">
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="servicios-header">
+    <span class="section-label">Especialidades</span>
+    <h2 class="section-title fade-up">Servicios</h2>
+  </div>
+  <div class="servicios-grid">
+    <div class="servicio-card fade-up" onclick="toggleServicio(this)">
+      <span class="servicio-num">01</span>
+      <h3 class="servicio-title">Análisis individual</h3>
+      <p class="servicio-desc">Sesiones de psicoanálisis para adolescentes y adultos, presenciales en Cancún o en línea.</p>
+      <span class="servicio-arrow">Ver analistas ↓</span>
+      <div class="servicio-analistas">
+        <p class="servicio-analistas-label">Analistas que ofrecen este servicio</p>
+        <a href="#analistas" class="analista-chip">Gabriel García</a>
+        <a href="#analistas" class="analista-chip">Gerardo Anzures</a>
+        <a href="#analistas" class="analista-chip">Alejandro Soto</a>
+        <a href="#analistas" class="analista-chip">Ingrid Nixe</a>
+      </div>
+    </div>
+    <div class="servicio-card fade-up" onclick="toggleServicio(this)">
+      <span class="servicio-num">02</span>
+      <h3 class="servicio-title">Supervisión clínica</h3>
+      <p class="servicio-desc">Espacio para profesionales de salud mental que deseen pensar su clínica desde otro lugar.</p>
+      <span class="servicio-arrow">Ver analistas ↓</span>
+      <div class="servicio-analistas">
+        <p class="servicio-analistas-label">Analistas que ofrecen este servicio</p>
+        <a href="#analistas" class="analista-chip">Gabriel García</a>
+        <a href="#analistas" class="analista-chip">Gerardo Anzures</a>
+        <a href="#analistas" class="analista-chip">Alejandro Soto</a>
+        <a href="#analistas" class="analista-chip">Ingrid Nixe</a>
+      </div>
+    </div>
+    <div class="servicio-card fade-up" onclick="toggleServicio(this)">
+      <span class="servicio-num">03</span>
+      <h3 class="servicio-title">Orientación para padres</h3>
+      <p class="servicio-desc">Espacios de orientación para padres y cuidadores que buscan acompañamiento en torno a la crianza, el desarrollo y el malestar de sus hijos.</p>
+      <span class="servicio-arrow">Ver analistas ↓</span>
+      <div class="servicio-analistas">
+        <p class="servicio-analistas-label">Analistas que ofrecen este servicio</p>
+        <a href="#analistas" class="analista-chip">Gabriel García</a>
+        <a href="#analistas" class="analista-chip">Gerardo Anzures</a>
+        <a href="#analistas" class="analista-chip">Alejandro Soto</a>
+        <a href="#analistas" class="analista-chip">Ingrid Nixe</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<div class="agenda-banner">
+  <div>
+    <h3>¿Listo para comenzar?</h3>
+    <p>Primera sesión de orientación. Presencial en Cancún o en línea.</p>
+  </div>
+  <a href="#contacto" class="btn-lino">Agendar Primera Consulta →</a>
+</div>
+
+<!-- ANALISTAS -->
+<section id="analistas">
+  <div class="analistas-header">
+    <span class="section-label">Quiénes somos</span>
+    <h2 class="section-title fade-up">Analistas</h2>
+  </div>
+  <div class="analistas-grid">
+
+    <div class="analista-card fade-up">
+      <div class="analista-avatar">GG</div>
+      <div class="analista-name">Gabriel García Sánchez</div>
+      <div class="analista-rol">Psicoanalista · Cancún</div>
+      <p class="analista-bio">Biografía próximamente.</p>
+      <div class="analista-actions">
+        <a class="analista-wa" href="https://wa.me/529981445201?text=Hola%20Gabriel,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <button class="analista-pub-btn" onclick="togglePubs(this)">Escritos ↓</button>
+      </div>
+      <div class="analista-pubs">
+        <p class="analista-pubs-label">Publicaciones de Gabriel</p>
+        <div class="pub-item"><p class="pub-placeholder">Próximamente.</p></div>
+      </div>
+    </div>
+
+    <div class="analista-card fade-up">
+      <div class="analista-avatar">GA</div>
+      <div class="analista-name">Gerardo Anzures</div>
+      <div class="analista-rol">Psicoanalista · Cancún</div>
+      <p class="analista-bio">Biografía próximamente.</p>
+      <div class="analista-actions">
+        <a class="analista-wa" href="https://wa.me/529983423808?text=Hola%20Gerardo,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <button class="analista-pub-btn" onclick="togglePubs(this)">Escritos ↓</button>
+      </div>
+      <div class="analista-pubs">
+        <p class="analista-pubs-label">Publicaciones de Gerardo</p>
+        <div class="pub-item"><p class="pub-placeholder">Próximamente.</p></div>
+      </div>
+    </div>
+
+    <div class="analista-card fade-up">
+      <div class="analista-avatar">AS</div>
+      <div class="analista-name">Alejandro Soto</div>
+      <div class="analista-rol">Psicoanalista · Cancún</div>
+      <p class="analista-bio">Biografía próximamente.</p>
+      <div class="analista-actions">
+        <a class="analista-wa" href="https://wa.me/529983056978?text=Hola%20Alejandro,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <button class="analista-pub-btn" onclick="togglePubs(this)">Escritos ↓</button>
+      </div>
+      <div class="analista-pubs">
+        <p class="analista-pubs-label">Publicaciones de Alejandro</p>
+        <div class="pub-item"><p class="pub-placeholder">Próximamente.</p></div>
+      </div>
+    </div>
+
+    <div class="analista-card fade-up">
+      <div class="analista-avatar">IN</div>
+      <div class="analista-name">Ingrid Nixe</div>
+      <div class="analista-rol">Psicoanalista · Cancún</div>
+      <p class="analista-bio">Biografía próximamente.</p>
+      <div class="analista-actions">
+        <a class="analista-wa" href="https://wa.me/529984603085?text=Hola%20Ingrid,%20me%20interesa%20una%20consulta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <button class="analista-pub-btn" onclick="togglePubs(this)">Escritos ↓</button>
+      </div>
+      <div class="analista-pubs">
+        <p class="analista-pubs-label">Publicaciones de Ingrid</p>
+        <div class="pub-item"><p class="pub-placeholder">Próximamente.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACTIVIDADES -->
+<section id="actividades">
+  <div>
+    <span class="section-label">Actividades · Noticias</span>
+    <h2 class="section-title fade-up">Lo que hacemos</h2>
+  </div>
+  <div class="actividades-grid">
+    <div class="actividad-card fade-up">
+      <span class="actividad-tipo">Presentación</span>
+      <h3 class="actividad-title">Próximamente</h3>
+      <p class="actividad-desc">Aquí aparecerán presentaciones, lecturas y eventos del colectivo.</p>
+    </div>
+    <div class="actividad-card fade-up">
+      <span class="actividad-tipo">Poema · Literatura</span>
+      <h3 class="actividad-title">Próximamente</h3>
+      <p class="actividad-desc">Poemas, textos literarios y materiales que nos involucran.</p>
+    </div>
+    <div class="actividad-card fade-up">
+      <span class="actividad-tipo">Libro · Reseña</span>
+      <h3 class="actividad-title">Próximamente</h3>
+      <p class="actividad-desc">Libros y lecturas que recomendamos desde el colectivo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEMINARIOS -->
+<section id="seminarios">
+  <div>
+    <span class="section-label">Formación · Historia</span>
+    <h2 class="section-title fade-up">Seminarios</h2>
+  </div>
+  <div class="seminarios-grid">
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-1.jpg" alt="No Hay Análisis Didáctico — Manuel Hernández 2018">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Seminario · Oct 2018</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">No Hay Análisis Didáctico</strong>
+        <span style="font-size:12px; color:var(--topo);">Manuel Hernández · Ka'Yok', Cancún</span>
+      </div>
+    </div>
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-2.webp" alt="Transformarse en Analista — Manuel Hernández 2017">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Seminario · Nov 2017</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">Transformarse en Analista</strong>
+        <span style="font-size:12px; color:var(--topo);">Manuel Hernández · Ka'Yok', Cancún</span>
+      </div>
+    </div>
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-3.jpg" alt="Encuentros y Desencuentros">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Coloquio</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">Freud / Lacan: Encuentros y Desencuentros</strong>
+        <span style="font-size:12px; color:var(--topo);">Querétaro · Cancún · Cuernavaca</span>
+      </div>
+    </div>
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-4.jpg" alt="Del Goce y Otras Errancias — Mayo 2022">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Coloquio · Mayo 2022</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">Del Goce y Otras Errancias</strong>
+        <span style="font-size:12px; color:var(--topo);">6 y 7 de mayo · Cancún</span>
+      </div>
+    </div>
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-5.png" alt="Modalidades de la Clínica en Jacques Lacan 2026">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Coloquio · Abril 2026</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">Modalidades de la Clínica en Jacques Lacan</strong>
+        <span style="font-size:12px; color:var(--topo);">23–25 abril · Planetario Ka'Yok', Cancún</span>
+      </div>
+    </div>
+
+    <div class="seminario-img-card fade-up" onclick="window.location='seminarios.html'" style="cursor:pointer;">
+      <img src="seminario-6.jpg" alt="El Trago Amargo del Ocultismo — Gloria Leff">
+      <div class="seminario-img-caption">
+        <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terracota); display:block; margin-bottom:4px;">Seminario · Diciembre</span>
+        <strong style="font-family:'EB Garamond',serif; font-size:15px; color:var(--carbon); display:block;">El Trago Amargo del Ocultismo</strong>
+        <span style="font-size:12px; color:var(--topo);">Gloria Leff · Kukulcán Plaza, Cancún</span>
+      </div>
+    </div>
+
+  </div>
+  <div style="text-align:center; margin-top:36px;">
+    <a href="seminarios.html" class="btn-outline" style="display:inline-block;">Ver todos los seminarios →</a>
+  </div>
+</section>
+
+<!-- MATERIAL -->
+<section id="material">
+  <div class="material-header">
+    <span class="section-label">Acervo cultural</span>
+    <h2 class="section-title fade-up">Material</h2>
+  </div>
+  <div class="material-grid">
+    <a class="material-card fade-up" href="https://www.youtube.com/watch?v=guzvRgWddkA&t=5375s" target="_blank" rel="noopener">
+      <span class="material-tipo">Película</span>
+      <div class="material-title">Adieu, Lacan</div>
+      <div class="material-link">Ver en YouTube →</div>
+    </a>
+    <a class="material-card fade-up" href="https://www.epeele.org/editorial" target="_blank" rel="noopener">
+      <span class="material-tipo">Editorial</span>
+      <div class="material-title">Editorial Psicoanalítica de la Letra — Epeele</div>
+      <div class="material-link">epeele.org →</div>
+    </a>
+    <a class="material-card fade-up" href="https://www.mecayoelveinte.com/" target="_blank" rel="noopener">
+      <span class="material-tipo">Editorial</span>
+      <div class="material-title">Editorial Me cayó el veinte</div>
+      <div class="material-link">mecayoelveinte.com →</div>
+    </a>
+  </div>
+</section>
+
+<!-- PUBLICACIONES -->
+<section id="publicaciones">
+  <div>
+    <span class="section-label">Escritos del colectivo</span>
+    <h2 class="section-title fade-up">Publicaciones</h2>
+  </div>
+  <div class="blog-grid">
+    <a href="publicaciones.html" class="blog-card fade-up">
+      <span class="blog-tag">Próximamente</span>
+      <h3 class="blog-title">Primer escrito de Haciendo Algo</h3>
+      <p class="blog-excerpt">Aquí irán los textos, reflexiones clínicas y notas teóricas que vayamos produciendo.</p>
+      <div class="blog-meta">
+        <span class="blog-autor">Haciendo Algo</span>
+        <span class="blog-fecha">2025</span>
+      </div>
+      <span class="blog-leer">Leer →</span>
+    </a>
+    <a href="publicaciones.html" class="blog-card fade-up">
+      <span class="blog-tag">Próximamente</span>
+      <h3 class="blog-title">Más escritos por venir</h3>
+      <p class="blog-excerpt">Pásame los textos cuando los tengas y los integro aquí con nombre del autor y fecha.</p>
+      <div class="blog-meta">
+        <span class="blog-autor">Haciendo Algo</span>
+        <span class="blog-fecha">2025</span>
+      </div>
+      <span class="blog-leer">Leer →</span>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contacto-info">
+    <span class="section-label">Escríbenos</span>
+    <p class="contacto-lema">"No tienes que llegar sabiendo qué te pasa para comenzar."</p>
+    <p class="contacto-sublema">Haz algo.</p>
+    <div class="contacto-dato">
+      <span class="contacto-dato-label">Correo</span>
+      <span class="contacto-dato-valor"><a href="mailto:haciendoalgo.psi@gmail.com">haciendoalgo.psi@gmail.com</a></span>
+    </div>
+    <div class="contacto-dato">
+      <span class="contacto-dato-label">Ubicación</span>
+      <span class="contacto-dato-valor">Cancún, Quintana Roo · En línea</span>
+    </div>
+    <div class="contacto-dato">
+      <span class="contacto-dato-label">WhatsApp</span>
+      <span class="contacto-dato-valor">
+        <a href="https://wa.me/529981445201" target="_blank" rel="noopener">Gabriel · +52 998 144 5201</a><br>
+        <a href="https://wa.me/529983423808" target="_blank" rel="noopener">Gerardo · +52 998 342 3808</a><br>
+        <a href="https://wa.me/529983056978" target="_blank" rel="noopener">Alejandro · +52 998 305 6978</a><br>
+        <a href="https://wa.me/529984603085" target="_blank" rel="noopener">Ingrid · +52 998 460 3085</a>
+      </span>
+    </div>
+    <div class="contacto-social">
+      <a class="social-link" href="https://instagram.com/_haciendoalgo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        @_haciendoalgo
+      </a>
+    </div>
+  </div>
+  <div class="contacto-form">
+    <p style="font-size:13px; color:var(--topo); margin-bottom:24px; line-height:1.7;">¿Quieres comenzar un análisis? Elige a tu analista y tu mensaje llegará directo a su WhatsApp.</p>
+    <div class="form-group">
+      <label>Elige tu analista</label>
+      <select id="f-analista" onchange="actualizarBoton()">
+        <option value="">Selecciona un analista</option>
+        <option value="529981445201|Gabriel García Sánchez">Gabriel García Sánchez</option>
+        <option value="529983423808|Gerardo Anzures">Gerardo Anzures</option>
+        <option value="529983056978|Alejandro Soto">Alejandro Soto</option>
+        <option value="529984603085|Ingrid Nixe">Ingrid Nixe</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="f-nombre">Nombre</label>
+      <input type="text" id="f-nombre" placeholder="Tu nombre">
+    </div>
+    <div class="form-group">
+      <label for="f-motivo">Motivo</label>
+      <select id="f-motivo">
+        <option value="">Selecciona una opción</option>
+        <option value="Quiero iniciar un análisis">Iniciar un análisis</option>
+        <option value="Supervisión clínica">Supervisión clínica</option>
+        <option value="Orientación para padres">Orientación para padres</option>
+        <option value="Quiero saber más antes de decidir">Quiero saber más antes de decidir</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="f-mensaje">Mensaje (opcional)</label>
+      <textarea id="f-mensaje" placeholder="Puedes escribir lo que quieras o dejarlo en blanco..."></textarea>
+    </div>
+    <button class="btn-wa-form" id="btnContacto" onclick="enviarContactoWA()" disabled>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar por WhatsApp
+    </button>
+    <p style="font-size:11px; color:var(--topo); margin-top:10px; text-align:center;">Elige un analista para activar el botón.</p>
+  </div>
+</section>
+
+<!-- QR -->
+<div class="qr-section">
+  <img class="qr-img" id="qrImg" alt="QR Haciendo Algo Psicoanálisis Cancún">
+  <div class="qr-text">
+    <h3>Comparte Haciendo Algo</h3>
+    <p>Escanea el código con tu celular para abrir la página, o compártelo en tus materiales del colectivo.</p>
+    <span class="qr-url" id="qrUrl"></span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">HACIENDO ALGO · PSA · CANCÚN</span>
+  <ul class="footer-links">
+    <li><a href="#porque">¿Por qué?</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#analistas">Analistas</a></li>
+    <li><a href="#actividades">Actividades</a></li>
+    <li><a href="#publicaciones">Escritos</a></li>
+    <li><a href="#material">Material</a></li>
+    <li><a href="https://instagram.com/_haciendoalgo" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <span class="footer-copy">© 2025 Haciendo Algo</span>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('navLinks').classList.toggle('open'));
+  document.querySelectorAll('#navLinks a').forEach(a =>
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+
+  document.getElementById('waToggle').addEventListener('click', () =>
+    document.getElementById('waMenu').classList.toggle('open'));
+
+  function toggleServicio(card) {
+    const panel = card.querySelector('.servicio-analistas');
+    const arrow = card.querySelector('.servicio-arrow');
+    const isOpen = panel.classList.contains('open');
+    document.querySelectorAll('.servicio-analistas').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.servicio-arrow').forEach(a => a.textContent = 'Ver analistas ↓');
+    if (!isOpen) { panel.classList.add('open'); arrow.textContent = 'Ocultar ↑'; }
+  }
+
+  function togglePubs(btn) {
+    const panel = btn.closest('.analista-card').querySelector('.analista-pubs');
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    btn.textContent = isOpen ? 'Escritos ↓' : 'Ocultar ↑';
+  }
+
+  function actualizarBoton() {
+    document.getElementById('btnContacto').disabled = !document.getElementById('f-analista').value;
+  }
+
+  function enviarContactoWA() {
+    const val = document.getElementById('f-analista').value;
+    if (!val) return;
+    const [numero, nombre] = val.split('|');
+    const n = document.getElementById('f-nombre').value.trim() || 'sin nombre';
+    const m = document.getElementById('f-motivo').value || 'no indicado';
+    const msg = document.getElementById('f-mensaje').value.trim();
+    let txt = `Hola ${nombre}, me comunico desde la página de Haciendo Algo.\n\n*Nombre:* ${n}\n*Motivo:* ${m}`;
+    if (msg) txt += `\n*Mensaje:* ${msg}`;
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(txt)}`, '_blank');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 70);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  window.addEventListener('load', () => {
+    const raw = window.location.href;
+    const url = raw.split('?')[0].split('#')[0].replace(/\/colectivo-psa\.html$/, '/').replace(/\/$/, '') + '/';
+    const qrUrl = url + 'colectivo-psa.html';
+    document.getElementById('qrImg').src =
+      'https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=2E2925&bgcolor=F2EBE0&margin=10&data=' + encodeURIComponent(qrUrl);
+    document.getElementById('qrUrl').textContent = qrUrl;
+  });
+</script>
+</body>
+</html>
