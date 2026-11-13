@@ -30,10 +30,13 @@
   }
 
   function actualizarBoton() {
-    const ok = document.getElementById('f-analista').value && document.getElementById('f-motivo').value;
+    if (!document.getElementById('f-analista') || !document.getElementById('f-motivo')) return;
+    const _a = document.getElementById('f-analista'), _m = document.getElementById('f-motivo');
+    if (!_a || !_m) return;
+    const ok = _a.value && _m.value;
     document.getElementById('btnContacto').disabled = !ok;
   }
-  document.getElementById('f-motivo').addEventListener('change', actualizarBoton);
+  if (document.getElementById('f-motivo')) document.getElementById('f-motivo').addEventListener('change', actualizarBoton);
 
   function trackWA(origen, analista) {
     try {
